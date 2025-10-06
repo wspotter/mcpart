@@ -5,6 +5,8 @@ import {
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { socialMediaManager } from './social-media.js';
+import { universalTools, handleUniversalTool } from './universal-tools.js';
+import { vipTools, handleVIPTool } from './vip-tools.js';
 
 // Art Supply Store MCP Server
 const server = new Server(
@@ -506,6 +508,8 @@ const tools = [
       required: ['competitors'],
     },
   },
+  ...universalTools,
+  ...vipTools
 ];
 
 // Register all tools
@@ -520,6 +524,52 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
     switch (name) {
       // INVENTORY MANAGEMENT
+      // VIP DATASET GENERATION TOOLS
+      case 'vip_generate_dataset':
+      case 'vip_check_status':
+      case 'vip_list_datasets':
+      case 'vip_get_dataset_info':
+      case 'vip_stop_pipeline':
+      case 'vip_validate_config':
+      case 'vip_health_check': {
+        const result = await handleVIPTool(name, args);
+        return {
+          content: [{
+            type: 'text',
+            text: result
+          }]
+        };
+      }
+
+
+      // UNIVERSAL DAILY TASK TOOLS
+      case 'create_task':
+      case 'list_tasks':
+      case 'complete_task':
+      case 'update_task':
+      case 'get_daily_agenda':
+      case 'schedule_event':
+      case 'list_upcoming_events':
+      case 'set_reminder':
+      case 'get_today_schedule':
+      case 'create_note':
+      case 'search_notes':
+      case 'tag_note':
+      case 'log_expense':
+      case 'get_expense_summary':
+      case 'categorize_expenses':
+      case 'generate_daily_summary':
+      case 'export_data':
+      case 'create_alert':
+      case 'list_alerts': {
+        const result = await handleUniversalTool(name, args);
+        return {
+          content: [{
+            type: 'text',
+            text: JSON.stringify(result, null, 2)
+          }]
+        };
+      }
       case 'check_inventory': {
         const search = String(args?.search || '').toLowerCase();
         const results = storeData.inventory.filter(item =>
