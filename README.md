@@ -8,6 +8,10 @@
 
 A complete Model Context Protocol (MCP) server for managing an art supply store business with 36 professional tools across 8 categories, plus social media integration.
 
+<a href="https://glama.ai/mcp/servers/@wspotter/mcpart">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@wspotter/mcpart/badge" alt="Art Supply Store MCP server" />
+</a>
+
 ## ✨ Features
 
 ### 📦 36 Business Management Tools
